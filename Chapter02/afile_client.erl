@@ -1,6 +1,6 @@
 -module(afile_client).
 
--export([get_file/2, list_directory/1, put_file/2]).
+-export([get_file/2, list_directory/1, put_file/2, change_directory/2]).
 
 % list all the files in dir
 list_directory(File_Server) ->
@@ -23,3 +23,10 @@ put_file(File_Server, File) ->
         {Server, {ok, FileHandleProcess}} -> FileHandleProcess;
         {Server, {error, ErrorType}} -> "File Already Exists"
     end.
+
+change_directory(File_Server, DirectoryPath) ->
+
+    File_Server ! {self(), {change_directory, DirectoryPath}} ->
+        receive
+            {Server, IsDone} -> IsDone
+        end.
